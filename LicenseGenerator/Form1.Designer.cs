@@ -37,6 +37,7 @@
             this.generateBtn = new System.Windows.Forms.Button();
             this.exportBtn = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.exportText = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -50,12 +51,14 @@
             // 
             // macAddress
             // 
+            this.macAddress.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.macAddress.Location = new System.Drawing.Point(96, 9);
             this.macAddress.MaxLength = 12;
             this.macAddress.Name = "macAddress";
             this.macAddress.Size = new System.Drawing.Size(368, 21);
             this.macAddress.TabIndex = 1;
             this.macAddress.TextChanged += new System.EventHandler(this.macAddress_TextChanged);
+            this.macAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.macAddress_KeyPress);
             // 
             // label2
             // 
@@ -92,7 +95,7 @@
             // 
             // generateBtn
             // 
-            this.generateBtn.Location = new System.Drawing.Point(96, 92);
+            this.generateBtn.Location = new System.Drawing.Point(96, 91);
             this.generateBtn.Name = "generateBtn";
             this.generateBtn.Size = new System.Drawing.Size(75, 23);
             this.generateBtn.TabIndex = 6;
@@ -102,7 +105,7 @@
             // 
             // exportBtn
             // 
-            this.exportBtn.Location = new System.Drawing.Point(178, 91);
+            this.exportBtn.Location = new System.Drawing.Point(177, 91);
             this.exportBtn.Name = "exportBtn";
             this.exportBtn.Size = new System.Drawing.Size(75, 23);
             this.exportBtn.TabIndex = 7;
@@ -115,11 +118,22 @@
             this.saveFileDialog1.FileName = "license.dat";
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
+            // exportText
+            // 
+            this.exportText.AutoSize = true;
+            this.exportText.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.exportText.Location = new System.Drawing.Point(94, 117);
+            this.exportText.Name = "exportText";
+            this.exportText.Size = new System.Drawing.Size(41, 12);
+            this.exportText.TabIndex = 8;
+            this.exportText.Text = "label4";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(476, 272);
+            this.Controls.Add(this.exportText);
             this.Controls.Add(this.exportBtn);
             this.Controls.Add(this.generateBtn);
             this.Controls.Add(this.label3);
@@ -146,6 +160,7 @@
         private System.Windows.Forms.Button generateBtn;
         private System.Windows.Forms.Button exportBtn;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Label exportText;
     }
 }
 

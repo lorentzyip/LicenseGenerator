@@ -14,14 +14,13 @@ namespace LicenseGenerator
 {
     public partial class Form1 : Form
     {
-        bool regen;
-
         public Form1()
         {
             InitializeComponent();
             cipherText.Text = "";
+            exportText.Text = "";
             cipherText.ReadOnly = true;
-            regen = true;
+            exportBtn.Enabled = false;
         }
 
         private void generateBtn_Click(object sender, EventArgs e)
@@ -40,29 +39,25 @@ namespace LicenseGenerator
             passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
             byte[] bytesEncrypted = cryto.AES_Encrypt(bytesToBeEncrypted, passwordBytes);
             cipherText.Text = Convert.ToBase64String(bytesEncrypted);
-            regen = false;
+            exportBtn.Enabled = true;
         }
 
         private void macAddress_TextChanged(object sender, EventArgs e)
         {
             cipherText.Text = "";
-            regen = true;
+            exportText.Text = "";
+            exportBtn.Enabled = false;
         }
 
         private void expiryDate_ValueChanged(object sender, EventArgs e)
         {
             cipherText.Text = "";
-            regen = true;
+            exportText.Text = "";
+            exportBtn.Enabled = false;
         }
 
         private void exportBtn_Click(object sender, EventArgs e)
         {
-            if (regen)
-            {
-                MessageBox.Show("Please press 'Generate' button.");
-                return;
-            }
-
             saveFileDialog1.ShowDialog();
         }
 
@@ -72,9 +67,22 @@ namespace LicenseGenerator
 
             try {
                 File.WriteAllText(fileName, cipherText.Text);
+                exportText.Text = "File Exported";
             } catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void macAddress_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (Char.IsLetterOrDigit(e.KeyChar) || e.KeyChar == '\b')
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
             }
         }
     }
