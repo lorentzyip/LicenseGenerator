@@ -19,8 +19,13 @@ namespace LicenseGenerator
             InitializeComponent();
             cipherText.Text = "";
             exportText.Text = "";
+            licenseFileName.Text = "";
+            licenseMacAddress.Text = "";
+            licenseExpiryDate.Text = "";
+            decryptButton.Enabled = false;
             cipherText.ReadOnly = true;
             exportBtn.Enabled = false;
+            lblDecryptMessage.Text = "";
         }
 
         private void generateBtn_Click(object sender, EventArgs e)
@@ -83,6 +88,58 @@ namespace LicenseGenerator
             else
             {
                 e.Handled = true;
+            }
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            licenseFileName.Text = "";
+            licenseExpiryDate.Text = "";
+            licenseMacAddress.Text = "";
+            lblDecryptMessage.Text = "";
+
+            string fileName = openFileDialog1.FileName;
+            if (fileName != null || fileName != "")
+            {
+                licenseFileName.Text = fileName;
+                decryptButton.Enabled = false;
+            }
+
+            decryptButton.Enabled = true;
+        }
+
+        private void browseLicenseButton_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+        }
+
+        private void decryptButton_Click(object sender, EventArgs e)
+        {
+            if (licenseFileName.Text == "")
+            {
+                lblDecryptMessage.Text = "Choose license file to decrypt.";
+                decryptButton.Enabled = false;
+            }
+
+            try
+            {
+                string[] encryptedText = File.ReadAllLines(licenseFileName.Text);
+                Crypto cryptoHelper = new Crypto();
+
+                byte[] encryptedBytes = Convert.FromBase64String(encryptedText[0]);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes("Lorentz@QWESTRO");
+                passwordBytes = SHA256.Create().ComputeHash(passwordBytes);
+                byte[] decryptedBytes = cryptoHelper.AES_Decrypt(encryptedBytes, passwordBytes);
+                string decryptedText = Encoding.UTF8.GetString(decryptedBytes);
+
+                licenseMacAddress.Text = decryptedText.Substring(0, 12).ToUpper();
+
+                DateTime expiryDate = DateTime.ParseExact(decryptedText.Substring(13), "ddMMyyyy", null);
+
+                licenseExpiryDate.Text = expiryDate.ToString();
+            } catch (Exception ex)
+            {
+                lblDecryptMessage.Text = ex.ToString();
             }
         }
     }
